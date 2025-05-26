@@ -1,3 +1,4 @@
+import java.util.Locale;
 import java.util.Scanner;
 
 public class UserInterface {
@@ -13,8 +14,7 @@ public class UserInterface {
         System.out.println("Velkommen til " + shopName);
         System.out.println("1) Køb blomster");
         System.out.println("2) Se indkøbskurv");
-        System.out.println("3) Fjern en vare fra indkøbskurv");
-        System.out.println("4) Gå til kassen");
+        System.out.println("3) Gå til kassen");
         System.out.println("x) Forlad butik");
     }
 
@@ -29,9 +29,9 @@ public class UserInterface {
     }
 
     public int promptNumeric(String message) {
-        System.out.println(message);
         int numberInput = 0;
         boolean isNumberValid = false;
+        System.out.println(message);
         while (!isNumberValid) {
             String input = scanner.nextLine();
             try {
@@ -44,23 +44,16 @@ public class UserInterface {
         return numberInput;
     }
 
-    public boolean promptBinary(String msg) {
-        String choice = readInput(msg);
-        boolean userHasPressedYesOrNo = false;
-
-        while (!userHasPressedYesOrNo){
-            if(choice.equalsIgnoreCase("Y")){
+    public boolean promptBinary(String message) {
+        while (true) {
+            String choice = readInput(message);
+            if (choice.equalsIgnoreCase("Y")) {
                 return true;
             } else if (choice.equalsIgnoreCase("N")) {
                 return false;
-        } else {
+            } else {
                 System.out.println("Venligst indtast Y/N");
             }
-
-
-
-
         }
     }
-
 }
