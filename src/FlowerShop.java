@@ -1,25 +1,20 @@
-import java.util.ArrayList;
+
 import java.util.List;
 
 public class FlowerShop {
 
-    private double total;
     private String name;
-    private final double bouquetPrice = 50.0;
-    private List<Flower> flowers;
-    private List<Flower> shoppingCart;
     private UserInterface ui;
-    private boolean userWantsFlowerBouquet;
+    private CartManager cartManager;
     private boolean appRunning;
+    private List<Flower> flowersForSale;
 
     public FlowerShop(String name) {
         this.name = name;
-        this.shoppingCart = new ArrayList<>();
-        this.flowers = new ArrayList<>();
-        this.total = 0;
-        this.appRunning = true;
+        this.cartManager = new CartManager();
         this.ui = new UserInterface();
-        addFlowersToShop();
+        this.appRunning = true;
+        this.flowersForSale = cartManager.getFlowers();
     }
 
     public void runDialog() {
@@ -51,10 +46,10 @@ public class FlowerShop {
     private void showFlowersForSale() {
         ui.printMessage("Prisliste:");
 
-        for (int i = 0; i < flowers.size(); i++) {
-            ui.printMessage(i + 1 + ". " + flowers.get(i));
+        for (int i = 0; i < flowersForSale.size(); i++) {
+            ui.printMessage(i + 1 + ". " + flowersForSale.get(i));
         }
-        ui.printMessage("Buket pris: " + bouquetPrice + " kr.");
+        ui.printMessage("Buket pris: " + cartManager.getBouquetPrice() + " kr.");
         ui.printMessage("");
 
     }
@@ -70,10 +65,9 @@ public class FlowerShop {
                 int choice = ui.promptNumeric("Vælg en blomst ud fra nummer, du mangler at tilføje: " + counter);
                 choice--;
 
-                if (choice >= 0 && choice < flowers.size()) {
-                    Flower chosenFlower = flowers.get(choice);
-                    shoppingCart.add(chosenFlower);
-                    addToTotal(chosenFlower.getPrice());
+                if (choice >= 0 && choice < flowersForSale.size()) {
+                    Flower chosenFlower = cartManager.getFlowerByIndex(choice);
+                    cartManager.addToShoppingCart(chosenFlower);
                     counter--;
                 } else {
                     ui.printMessage("Venligst vælg en blomst udfra nummer på listen");
@@ -83,7 +77,7 @@ public class FlowerShop {
             boolean userWantsBouquet = ui.promptBinary("Vil du have bundet blomsterne i en buket +50.00 kr. Y/N?");
             if (userWantsBouquet) {
                 ui.printMessage("Dine blomster bliver bundet til en flot buket");
-                addToTotal(bouquetPrice);
+                cartManager.addBouquet();
             } else {
                 ui.printMessage("Blomsterne er tilføjet enkeltvis til din kurv");
             }
@@ -92,21 +86,18 @@ public class FlowerShop {
     }
 
     private void showShoppingCart() {
-        if (shoppingCart == null || shoppingCart.isEmpty()) {
+        if (isShoppingCartEmpty()) {
             ui.printMessage("Ingen varer er tilføjet indkøbskurv");
         } else {
             ui.printMessage("Din indkøbs kurv:");
             showFlowersInBasket();
-            ui.printMessage("Total: " + this.total + " Kr.");
+            ui.printMessage("Total: " + cartManager.getTotal() + " Kr.");
         }
     }
 
-    private void addToTotal(double amount) {
-        this.total += amount;
-    }
 
     private void goToCheckOut() {
-        if (shoppingCart == null || shoppingCart.isEmpty()) {
+        if (isShoppingCartEmpty()) {
             ui.printMessage("Din indkøbskurv er tom.. Tilføj varer før du går til kassen");
             return;
         }
@@ -115,33 +106,25 @@ public class FlowerShop {
         if (pay) {
             ui.printMessage("---Kvittering---");
             showFlowersInBasket();
-            if (userWantsFlowerBouquet) {
+            if (cartManager.getUserWantsFlowerBouquet()) {
                 ui.printMessage("Buket, pris: 50.00 kr.");
             }
             ui.printMessage("----------------");
-            ui.printMessage("Total: " + this.total + " kr.");
+            ui.printMessage("Total: " + cartManager.getTotal() + " kr.");
             ui.printMessage("Tak for dit køb");
-            this.total = 0;
-            this.shoppingCart = null;
+            cartManager.clearCart();
         }
     }
 
-    private void addFlowersToShop() {
-        flowers.add(new Flower("Rose", 45.00));
-        flowers.add(new Flower("Tulipan", 35.95));
-        flowers.add(new Flower("Lilje", 40.00));
-        flowers.add(new Flower("Orkide", 55.50));
-        flowers.add(new Flower("Magnolia", 75.50));
-        flowers.add(new Flower("Lavendel", 80.00));
-        flowers.add(new Flower("Raunkle", 58.50));
-        flowers.add(new Flower("Nellike", 48.75));
-        flowers.add(new Flower("Pæon", 75.50));
-        flowers.add(new Flower("Anemone", 63.95));
-    }
 
     private void showFlowersInBasket() {
-        for (Flower flower : shoppingCart) {
+        List<Flower> flowers = cartManager.getShoppingCart();
+        for (Flower flower : flowers) {
             ui.printMessage(flower.toString());
         }
+    }
+
+    private boolean isShoppingCartEmpty() {
+        return cartManager.getShoppingCart() == null || cartManager.getShoppingCart().isEmpty();
     }
 }

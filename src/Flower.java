@@ -25,6 +25,6 @@ public class Flower {
 
     @Override
     public String toString(){
-        return this.name + ", pris: " + this.price + " kr.";
+        return name + ", pris: " + String.format("%.2f", price) + " kr.";
     }
 }
