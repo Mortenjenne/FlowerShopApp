@@ -6,15 +6,17 @@ public class FlowerShop {
     private String name;
     private UserInterface ui;
     private CartManager cartManager;
+    private Inventory inventory;
     private boolean appRunning;
     private List<Flower> flowersForSale;
 
     public FlowerShop(String name) {
         this.name = name;
         this.cartManager = new CartManager();
+        this.inventory = new Inventory();
         this.ui = new UserInterface();
         this.appRunning = true;
-        this.flowersForSale = cartManager.getFlowers();
+        this.flowersForSale = inventory.getFlowers();
     }
 
     public void runDialog() {
@@ -49,6 +51,7 @@ public class FlowerShop {
         for (int i = 0; i < flowersForSale.size(); i++) {
             ui.printMessage(i + 1 + ". " + flowersForSale.get(i));
         }
+
         ui.printMessage("Buket pris: " + cartManager.getBouquetPrice() + " kr.");
         ui.printMessage("");
 
@@ -66,11 +69,11 @@ public class FlowerShop {
                 choice--;
 
                 if (choice >= 0 && choice < flowersForSale.size()) {
-                    Flower chosenFlower = cartManager.getFlowerByIndex(choice);
+                    Flower chosenFlower = inventory.getFlowerByIndex(choice);
                     cartManager.addToShoppingCart(chosenFlower);
                     counter--;
                 } else {
-                    ui.printMessage("Venligst vælg en blomst udfra nummer på listen");
+                    ui.printMessage("Venligst vælg en blomst ud fra nummer på listen");
                 }
             }
 
@@ -81,7 +84,6 @@ public class FlowerShop {
             } else {
                 ui.printMessage("Blomsterne er tilføjet enkeltvis til din kurv");
             }
-
         }
     }
 
@@ -107,7 +109,8 @@ public class FlowerShop {
             ui.printMessage("---Kvittering---");
             showFlowersInBasket();
             if (cartManager.getUserWantsFlowerBouquet()) {
-                ui.printMessage("Buket, pris: 50.00 kr.");
+                double bouquetPrice = cartManager.getBouquetPrice() * cartManager.getBouquetCount();
+                ui.printMessage("Buket pris: " + bouquetPrice);
             }
             ui.printMessage("----------------");
             ui.printMessage("Total: " + cartManager.getTotal() + " kr.");

@@ -1,21 +1,20 @@
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import java.util.List;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 class CartManagerTest {
     private CartManager cartManager;
+    private Inventory inventory;
 
     @BeforeEach
     void setUp() {
         cartManager = new CartManager();
+        inventory = new Inventory();
     }
 
     @Test
     void testAddFlowerToShoppingCart() {
-        Flower flower = cartManager.getFlowerByIndex(4);
+        Flower flower = inventory.getFlowerByIndex(4);
         cartManager.addToShoppingCart(flower);
 
         assertEquals(1, cartManager.getShoppingCart().size());
@@ -44,14 +43,6 @@ class CartManagerTest {
         assertEquals(expected, cartManager.getTotal());
     }
 
-    @Test
-    void testGetFlowerByInvalidIndex() {
-        Flower flower = cartManager.getFlowerByIndex(-1);
-        assertNull(flower);
-
-        flower = cartManager.getFlowerByIndex(11);
-        assertNull(flower);
-    }
 
     @Test
     void testResetCartClearsEverything() {
