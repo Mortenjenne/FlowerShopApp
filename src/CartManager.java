@@ -8,14 +8,14 @@ public class CartManager {
     private List<Flower> shoppingCart;
     private boolean userWantsFlowerBouquet;
 
-    public CartManager(){
+    public CartManager() {
         this.total = 0;
         this.bouquetCount = 0;
         this.shoppingCart = new ArrayList<>();
         this.userWantsFlowerBouquet = false;
     }
 
-    public double getBouquetPrice(){
+    public double getBouquetPrice() {
         return this.bouquetPrice;
     }
 
@@ -23,30 +23,30 @@ public class CartManager {
         return bouquetCount;
     }
 
-    public boolean getUserWantsFlowerBouquet(){
+    public boolean getUserWantsFlowerBouquet() {
         return this.userWantsFlowerBouquet;
     }
 
-    public void addToTotal(double amount){
+    public void addToTotal(double amount) {
         this.total += amount;
     }
 
-    public double getTotal(){
-        return this.total;
+    public double getTotal() {
+        return Math.round(this.total * 100.0) / 100.0;
     }
 
-    public void addBouquet(){
+    public void addBouquet() {
         this.userWantsFlowerBouquet = true;
         this.bouquetCount++;
         addToTotal(bouquetPrice);
     }
 
-    public void addToShoppingCart(Flower flower){
+    public void addToShoppingCart(Flower flower) {
         this.shoppingCart.add(flower);
         addToTotal(flower.getPrice());
     }
 
-    public List<Flower> getShoppingCart(){
+    public List<Flower> getShoppingCart() {
         return this.shoppingCart;
     }
 

@@ -4,27 +4,27 @@ import java.util.List;
 public class Inventory {
     private List<Flower> flowers;
 
-    public Inventory(){
+    public Inventory() {
         this.flowers = new ArrayList<>();
         addFlowersToShop();
     }
 
-    public List<Flower> getFlowers(){
+    public List<Flower> getFlowers() {
         return this.flowers;
     }
 
-    public void addFlowerToInventory(String name, double price){
-        flowers.add(new Flower(name,price));
+    public void addFlowerToInventory(String name, double price) {
+        flowers.add(new Flower(name, price));
     }
 
-    public void removeFlowerFromInventory(Flower flower){
-        if(flower != null) {
+    public void removeFlowerFromInventory(Flower flower) {
+        if (flower != null) {
             flowers.remove(flower);
         }
     }
 
-    public Flower getFlowerByIndex(int index){
-        if(index >= 0 && index < flowers.size()) {
+    public Flower getFlowerByIndex(int index) {
+        if (index >= 0 && index < flowers.size()) {
             return flowers.get(index);
         } else {
             return null;
